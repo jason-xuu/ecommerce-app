@@ -1,0 +1,41 @@
+Key Types of Data to Track
+For a clothing store, we need to track several core types of data:
+
+Users (Customers, Admins, Vendors)
+Data related to different types of users visiting and managing the site.
+
+Products
+Data about clothing items, including sizes, colors, materials, and categories.
+
+Categories
+Organizing products into logical groups like shirts, pants, shoes, accessories, etc.
+
+Inventory
+Information about stock levels and suppliers of clothing items.
+
+Orders
+Data about customer orders, including products purchased, quantities, and shipping information.
+
+Shopping Cart
+Temporary data about products added to a cart before checkout.
+
+Product Customizations
+Allowing customers to customize items, such as color, size, or text (e.g., adding a monogram).
+
+Reviews and Ratings
+Customer feedback and ratings for clothing items.
+
+Payments
+Information on how customers pay for their orders (e.g., credit card, PayPal).
+
+Discounts and Promotions
+Data on promotional codes, seasonal discounts, and bulk purchase incentives.
+
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    role VARCHAR(20) CHECK (role IN ('Customer', 'Admin', 'Vendor')) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
