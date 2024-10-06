@@ -4,20 +4,16 @@
 require('dotenv').config();
 
 const express = require('express');
-const { Pool } = require('pg');  // Add this line to import Pool from pg
+const pool = require('./db'); // Import the pool from db.js
 const app = express();
+
+// Import route files
+const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes'); // Future addition
+const orderRoutes = require('./routes/orderRoutes');     // Future addition
 
 // Middleware to parse JSON requests
 app.use(express.json());
-
-// Setup PostgreSQL connection pool using environment variables
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
 
 // Test DB connection
 pool.connect((err, client, release) => {
@@ -28,16 +24,10 @@ pool.connect((err, client, release) => {
   release();
 });
 
-// Endpoint to get all users
-app.get('/users', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM users');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server Error');
-  }
-});
+// Use routes
+app.use('/users', userRoutes);
+app.use('/products', productRoutes); // For products endpoints
+app.use('/orders', orderRoutes);     // For orders endpoints
 
 const PORT = process.env.PORT || 3000;
 
@@ -48,3 +38,6 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// Export pool for use in other files (optional)
+module.exports = pool;
